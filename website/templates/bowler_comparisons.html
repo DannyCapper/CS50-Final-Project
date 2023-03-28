@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Bowler comparisons
+{% endblock %}
+
+{% block main %}
+
+<form action="/bowler_comparisons" method="post">
+    <div class="mb-3">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="bowler" name="bowler" type="text">
+    </div>
+    <button class="btn btn-primary" type="submit">Compare</button>
+</form>
+
+{% endblock %}

@@ -1,0 +1,87 @@
+/* Ribbon styles */
+.ribbon {
+	background-color: #e3f2d9;
+	color: #1a1a1a;
+	height: 70px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 24px;
+}
+
+.ribbon ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+}
+
+.ribbon li {
+	margin: 0 20px;
+}
+
+.ribbon li a {
+	color: #1a1a1a;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.ribbon li a:hover {
+	text-decoration: underline;
+}
+
+.logo {
+	height: 50px;
+  	margin-left: 20px;
+	margin-right: 20px;
+}
+
+/* Table styles */
+.table {
+	border-collapse: collapse;
+	width: 100%;
+	max-width: 800px;
+	margin: 0 auto;
+	background-color: #fff;
+	color: #333;
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+  }
+  
+  .table th,
+  .table td {
+	padding: 10px;
+	text-align: left;
+	vertical-align: middle;
+	border: 1px solid #ccc;
+  }
+  
+  .table th {
+	background-color: #f9f9f9;
+	font-weight: bold;
+  }
+  
+  .table tbody tr.odd {
+	background-color: #f5f5f5;
+  }
+  
+  .table-container {
+	margin-top: 20px;
+  }
+
+/* Container styles */
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 25vh;
+	width: 50%;
+}
+
+/* Image styles */
+  .image {
+	align-items: right;
+}
