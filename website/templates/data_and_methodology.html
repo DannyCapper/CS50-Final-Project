@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Data & Methodology
+{% endblock %}
+
+{% block main %}
+
+<div class="content-container">
+    <h1>Data</h1>
+    <p>All data used in this article is found at the following website cricsheet. The website’s creator has published data on c. 5,400 T20 matches across multiple leagues. For the purposes of this project, we use a sub-sample of the dataset; c. 2,600 International T20 matches</p>
+    <h1>Methodology</h1>
+    <p>Our methodology is inspired by chapter 6 of Moneyball. Imagine you have an exceptionally large sample size. Now consider a “match situation” in a cricket game. This is defined as a particular score, at a particular time e.g. 104-5 in over 15.3. With a large enough sample size, the sub-sample that is defined by matches where that match situation occurred will also be sufficiently large. For this sub-sample, we could divide the matches into two groups: one group where a wicket is lost in the next ball, and one group where a wicket is not lost in the next ball. We could then compare the average final score for each group. Finally, we could repeat this exercise for all occuring match situations. This method would allow us to estimate the run-value of a wicket, and would not be susceptible to endogeneity issues like a simple linear regression models.</p> 
+        
+    <p>Finally, note that we are only considering first innings scores. Given that the behavior of the second innings score is governed, in part, by the 1st innings score, we thought that it would be appropriately cautious to provisionally ignore the second innings.</p>
+</div>
+
+{% endblock %}

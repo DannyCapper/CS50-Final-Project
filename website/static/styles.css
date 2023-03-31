@@ -1,3 +1,45 @@
+/* Content container */
+.content-container {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 20px;
+  }
+  
+  /* Headers */
+  .content-container h1 {
+	font-size: 2rem;
+	font-weight: bold;
+	margin-bottom: 20px;
+  }
+  
+  .content-container h2 {
+	font-size: 1.5rem;
+	font-weight: bold;
+	margin-top: 20px;
+	margin-bottom: 10px;
+  }
+  
+  /* Paragraphs */
+  .content-container p {
+	font-size: 1rem;
+	line-height: 1.5;
+	margin-bottom: 20px;
+	text-align: justify;
+  }
+  
+  /* Image container */
+  .image-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 20px;
+  }
+  
+  .image-container img {
+	max-width: 100%;
+	height: auto;
+  }
+
 /* Ribbon styles */
 .ribbon {
 	background-color: #e3f2d9;
@@ -71,17 +113,48 @@
   }
 
 /* Container styles */
-  .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    height: 25vh;
-	width: 50%;
+.container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	height: 25vh;
+	margin-top: 150px;
+  }
+  
+  /* Image styles */
+  .image {
+	display: flex;
+	justify-content: center;
+  }
+
+  Copy code
+/* Pretty box container */
+.pretty-box {
+  background-color: #e3f2d9; /* Adjust the background color as needed */
+  border: 2px solid #1a1a1a; /* Adjust the border color and size as needed */
+  border-radius: 10px; /* Adjust the border radius for rounded corners */
+  padding: 20px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 300px; /* Adjust the maximum width as needed */
+  margin: 20px auto; /* Adjust the margin as needed */
 }
 
-/* Image styles */
-  .image {
-	align-items: right;
+/* Line 1 */
+.pretty-box .line1 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #1a1a1a; /* Adjust the text color as needed */
+  margin-bottom: 10px; /* Adjust the space between the lines as needed */
+}
+
+/* Line 2 */
+.pretty-box .line2 {
+  font-size: 1rem;
+  font-weight: normal;
+  color: #333; /* Adjust the text color as needed */
 }

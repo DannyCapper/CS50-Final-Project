@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Context
+{% endblock %}
+
+{% block main %}
+
+<div class="content-container">
+    <h1>Context: why care about the run-value of a wicket?</h1>
+    <p>The recent IPL auction was a timely reminder that successful cricket teams must place a monetary value on players. In this project, we seek to tackle an important challenge in the valuation of bowlers. Bowlers are judged largely on their economy and their bowling strike rate. But what is the common currency that allows us to compare economy and wicket-taking? Consider Royals bowlers Chris Morris and Sakariya in the 2021 IPL. Sakariya took an average of 0.3 wickets per over, at an economy of 8.2, while Morris took an average of 0.4 wickets per over, at an economy of 9.2. Who was the better bowler? This project seeks to empirically estimate the run-value of a wicket, allowing us to answer this question. </p>
+    <h2>What's wrong with a simple linear regression model?</h2>
+    <p>Naively, we might decide to run a simple linear regression of runs scored on wickets taken to estimate the run value of a wicket. However, we should be wary of possible endogeneity issues within such a model. Consider one such problem. Imagine a team that is 60-0 after 10 first-innings overs on a pitch they estimate is par 180. The team is struggling for runs, but what they do have, in excess, is wickets to spare. The batsmen at the crease decide to play riskier shots, and as it happens, the team loses wickets. In this example, we can identify a causal mechanism from a team’s low run rate to wickets lost. The team is losing wickets because they are not scoring enough runs because of the economy of opposing bowlers. However, in the aforementioned linear regression models, this mechanism would be treated as if the wickets caused the low run totals.</p>
+    <div class="image-container">
+        <img src="/static/regression.png" alt="regression">
+    </div>
+    <p>We show the plot of such a regession model above. The coefficient of the wicket parameter is -9.0 i.e. a wicket is worth 9 runs. Our discussion above suggested that wemight expect this coefficient to be biased upwards i.e. a wicket is worth less than 9 runs if part of the causality runs the reverse way. We'll keep this 9.0 figure in mind though as we work through our analysis, and we might consider it for now as a ceiling on the value of a wicket. </p>
+</div>
+
+{% endblock %}
