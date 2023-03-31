@@ -1,52 +1,83 @@
-import os
+"""
+This script processes an SQLite database and outputs a JSON file tracking the number of times a match situation arises
+"""
+
 import json
-import sqlite3 
+import sqlite3
+from pathlib import Path
 
-# Connect to the SQL database
-database_path = os.path.join("/mnt/c/WINDOWS/system32/CS50-Final-Project/analysis", "sql_database", "cricket.db")
-conn = sqlite3.connect(database_path)
+# Set the directory path for the database and output file
+database_path = Path(
+    "/mnt/c/USERS/danny/CS50-Final-Project/analysis/sql_database/cricket.db"
+)
+output_path = Path(
+    "/mnt/c/USERS/danny/CS50-Final-Project/analysis/output/match_situation_tracker.JSON"
+)
 
-# Create a cursor
-c = conn.cursor()
 
-# Create an empty dictionary tracking match situation counts
-match_situation_tracker = {}
+def main():
+    """
+    Main function to process the cricket database and create a match situation tracker.
+    """
+    match_situation_tracker = {}
 
-#Fetch all table names as a list of tuples
-c.execute("SELECT name FROM sqlite_master WHERE type='table'")
-tables = c.fetchall()
+    with sqlite3.connect(database_path) as conn:
+        cursor = conn.cursor()
 
-# Loop over each table
-for table in tables:
+        tables = get_all_tables(cursor)
 
-    # Fetch all rows as a list of tuples
-    c.execute("SELECT * FROM " + table[0])
-    rows = c.fetchall()
+        for table in tables:
+            process_table(cursor, table, match_situation_tracker)
 
-    # Define match id variable
-    match_id = table[0].split('_')[1]
+    save_match_situation_tracker(match_situation_tracker, output_path)
 
-    # Loop over each row
+
+def get_all_tables(cursor):
+    """
+    Get all table names in the database.
+
+    Args:
+        cursor: The SQLite cursor object.
+
+    Returns:
+        A list of table names.
+    """
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
+    return [table[0] for table in cursor.fetchall()]
+
+
+def process_table(cursor, table, match_situation_tracker):
+    """
+    Process a table to extract match situations and update the match_situation_tracker dictionary.
+
+    Args:
+        cursor: The SQLite cursor object.
+        table: The name of the table to process.
+        match_situation_tracker: The dictionary to update with match situations.
+    """
+    rows = cursor.execute(f"SELECT * FROM {table}").fetchall()
+    match_id = table.split("_")[1]
+
     for row in rows:
+        match_situation = row[8]
 
-        # Define match situation and key variables
-        match_situation = row[7]
-
-        # Check if match situation already in dictionary
         if match_situation not in match_situation_tracker:
-            
-            # Add a new key-value pair to the dictionary. Key is match situation and value is a list containing the match situation
-            list = []
-            match_situation_tracker[match_situation] = list
-        
-        # Add match_id to list
+            match_situation_tracker[match_situation] = []
+
         match_situation_tracker[match_situation].append(match_id)
 
-# Open the text file and read the contents into a dictionary
-output_path = os.path.join("/mnt/c/WINDOWS/system32/CS50-Final-Project/analysis", "txt_files", "match_situation_tracker.txt")
-with open(output_path, "w") as f:
-    json.dump(match_situation_tracker, f)
 
-# Close the cursor and the database connection
-c.close()
-conn.close()
+def save_match_situation_tracker(match_situation_tracker, output_path):
+    """
+    Save the match situation tracker dictionary as a JSON file.
+
+    Args:
+        match_situation_tracker: The dictionary containing match situations.
+        output_path: The path to save the JSON file.
+    """
+    with open(output_path, "w") as f:
+        json.dump(match_situation_tracker, f)
+
+
+if __name__ == "__main__":
+    main()

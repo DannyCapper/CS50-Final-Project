@@ -1,23 +1,67 @@
-import os
+"""
+This script processes a JSON file which tracks the frequency of match situations in the database and eliminates match situations where the sample size is 1
+"""
+
 import json
+from pathlib import Path
 
-# Open the file for reading
-input_path = os.path.join("/mnt/c/WINDOWS/system32/CS50-Final-Project/analysis", "txt_files", "match_situation_tracker.txt")
-with open(input_path, "r") as f:
-    # Load the contents of the file as a string and convert it to a dictionary
-    match_situation_tracker = json.load(f)
 
-# Create empty dictionary for storing match situations where n > 1
-match_situation_tracker_v2 = {}
+def main():
+    # Set the directory path for the input and output files
+    input_path = Path(
+        "/mnt/c/USERS/danny/CS50-Final-Project/analysis/output/match_situation_tracker.JSON"
+    )
+    output_path = Path(
+        "/mnt/c/USERS/danny/CS50-Final-Project/analysis/output/match_situation_tracker_v2.JSON"
+    )
 
-# Loop over each match situation
-for situation in match_situation_tracker.keys():
+    match_situation_tracker = load_match_situation_tracker(input_path)
+    match_situation_tracker_v2 = filter_match_situations(match_situation_tracker)
+    save_match_situation_tracker(match_situation_tracker_v2, output_path)
 
-    # Eliminate those where n < 2
-    if len(match_situation_tracker[situation]) > 1:
-        match_situation_tracker_v2[situation] = match_situation_tracker[situation]
 
-# Open the text file and read the contents into a dictionary
-output_path = os.path.join("/mnt/c/WINDOWS/system32/CS50-Final-Project/analysis", "txt_files", "match_situation_tracker_v2.txt")
-with open(output_path, "w") as f:
-    json.dump(match_situation_tracker_v2, f)
+def load_match_situation_tracker(input_path):
+    """
+    Load the match situation tracker from a JSON file.
+
+    Args:
+        input_path: The path to the input JSON file.
+
+    Returns:
+        A dictionary containing the match situations.
+    """
+    with open(input_path, "r") as f:
+        return json.load(f)
+
+
+def filter_match_situations(match_situation_tracker):
+    """
+    Filter match situations where the count is greater than 1.
+
+    Args:
+        match_situation_tracker: The dictionary containing match situations.
+
+    Returns:
+        A dictionary containing filtered match situations.
+    """
+    return {
+        situation: match_list
+        for situation, match_list in match_situation_tracker.items()
+        if len(match_list) > 1
+    }
+
+
+def save_match_situation_tracker(match_situation_tracker, output_path):
+    """
+    Save the match situation tracker as a JSON file.
+
+    Args:
+        match_situation_tracker: The dictionary containing match situations.
+        output_path: The path to save the JSON file.
+    """
+    with open(output_path, "w") as f:
+        json.dump(match_situation_tracker, f)
+
+
+if __name__ == "__main__":
+    main()

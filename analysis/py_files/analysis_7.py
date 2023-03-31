@@ -1,39 +1,69 @@
-import os
+"""
+This script processes a JSON file tracking match situations data and calculates the weighted average wicket value
+"""
+
 import json
+import os
+from typing import Dict
 
-# Open the file for reading
-input_path = os.path.join("/mnt/c/WINDOWS/system32/CS50-Final-Project/analysis", "txt_files", "match_situation_tracker_v5.txt")
-with open(input_path, "r") as f:
-    # Load the contents of the file as a string and convert it to a dictionary
-    match_situation_tracker_v5 = json.load(f)
 
-# Calculate total frequency for weightings
-total_frequency = 0
-for situation in match_situation_tracker_v5.keys():
-    total_frequency += match_situation_tracker_v5[situation][2]
+def main():
+    """
+    Main function to calculate the weighted average wicket value using the match situation tracker.
+    """
+    input_path = os.path.join(
+        "/mnt/c/USERS/danny/CS50-Final-Project/analysis",
+        "output",
+        "match_situation_tracker_v5.JSON",
+    )
 
-# Create tracker for weighted average
-weighted_average = 0
+    # Load the match situation tracker from the input file
+    match_situation_tracker_v5 = load_match_situation_tracker(input_path)
 
-# Loop over each match situation
-for situation in match_situation_tracker_v5.keys():
+    # Calculate the weighted average wicket value
+    weighted_average = calculate_weighted_average(match_situation_tracker_v5)
 
-    # Calculate difference of averages
-    difference = match_situation_tracker_v5[situation][0] - match_situation_tracker_v5[situation][1]
+    # Print the weighted average wicket value
+    print(f"Weighted average is: {weighted_average}")
 
-    # Calculate weight
-    frequency = match_situation_tracker_v5[situation][2]
-    weight = frequency / total_frequency
 
-    # Multiply difference by weight
-    diff_weight = difference * weight
+def load_match_situation_tracker(input_path: str) -> Dict:
+    """
+    Load the match situation tracker from a JSON file.
 
-    # Add to weighted average
-    weighted_average += diff_weight
+    Args:
+        input_path: The path to the input JSON file.
 
-# Define "final answer"
-wicket_value = weighted_average - 1
-weighted_average = round(wicket_value, 1)
+    Returns:
+        A dictionary containing the match situations.
+    """
+    with open(input_path, "r") as f:
+        return json.load(f)
 
-# Print out weighted average
-print(f"Weighted average is: {weighted_average}")
+
+def calculate_weighted_average(match_situation_tracker: Dict) -> float:
+    """
+    Calculate the weighted average wicket value using the match situation tracker.
+
+    Args:
+        match_situation_tracker: The dictionary containing match situations.
+
+    Returns:
+        A float representing the weighted average wicket value.
+    """
+    total_frequency = sum(
+        match_situation_tracker[situation][2]
+        for situation in match_situation_tracker.keys()
+    )
+    weighted_average = sum(
+        (match_situation_tracker[situation][0] - match_situation_tracker[situation][1])
+        * (match_situation_tracker[situation][2] / total_frequency)
+        for situation in match_situation_tracker.keys()
+    )
+
+    wicket_value = weighted_average - 1
+    return round(wicket_value, 1)
+
+
+if __name__ == "__main__":
+    main()

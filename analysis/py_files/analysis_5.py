@@ -1,68 +1,114 @@
-import os
+"""
+This script processes a JSON file tracking the frequency of match situations divided by sub-group and calculates the average final runs for each sub-group
+"""
+
 import json
-import sqlite3 
+import sqlite3
+from pathlib import Path
 
-# Connect to the SQL database
-database_path = os.path.join("/mnt/c/WINDOWS/system32/CS50-Final-Project/analysis", "sql_database", "cricket.db")
-conn = sqlite3.connect(database_path)
 
-# Create a cursor
-c = conn.cursor()
+def main():
+    """
+    Main function to process the cricket database and create a match situation tracker with averages and frequency.
+    """
+    # Set the directory path for the database and input/output files
+    database_path = Path(
+        "/mnt/c/USERS/danny/CS50-Final-Project/analysis/sql_database/cricket.db"
+    )
+    input_path = Path(
+        "/mnt/c/USERS/danny/CS50-Final-Project/analysis/output/match_situation_tracker_v4.JSON"
+    )
+    output_path = Path(
+        "/mnt/c/USERS/danny/CS50-Final-Project/analysis/output/match_situation_tracker_v5.JSON"
+    )
 
-# Open the file for reading
-input_path = os.path.join("/mnt/c/WINDOWS/system32/CS50-Final-Project/analysis", "txt_files", "match_situation_tracker_v4.txt")
-with open(input_path, "r") as f:
-    # Load the contents of the file as a string and convert it to a dictionary
-    match_situation_tracker_v4 = json.load(f)
+    # Load the match situation tracker from the input file
+    match_situation_tracker_v4 = load_match_situation_tracker(input_path)
 
-# Create empty dictionary for storing averages
-match_situation_tracker_v5 = {}
+    # Connect to the database and create a cursor
+    with sqlite3.connect(database_path) as conn:
+        cursor = conn.cursor()
 
-# Loop over each match situation
-for situation in match_situation_tracker_v4.keys():
+        # Calculate and store averages and frequency for each match situation
+        match_situation_tracker_v5 = calculate_averages_and_frequency(
+            cursor, match_situation_tracker_v4
+        )
 
-    # Create a list for storing averages & frequency to be added to dictionary
-    averages_list = []
+    # Save the match situation tracker with averages and frequency to the output file
+    save_match_situation_tracker(match_situation_tracker_v5, output_path)
 
-    # Create a variable for tracking frequency
-    frequency = 0
 
-    # Loop over each of the 2 lists
-    for i in range(2):
+def load_match_situation_tracker(input_path):
+    """
+    Load the match situation tracker from a JSON file.
 
-        # Calculate length of the list
-        length = len(match_situation_tracker_v4[situation][i])
-        frequency += length
+    Args:
+        input_path: The path to the input JSON file.
 
-        # Define counter variable
-        sum_run_total = 0
+    Returns:
+        A dictionary containing the match situations.
+    """
+    with open(input_path, "r") as f:
+        return json.load(f)
 
-        # Loop over each match in the list
-        for j in range(length):
 
-            # Lay out the table name
-            table_name = "match_" + match_situation_tracker_v4[situation][i][j]
+def calculate_averages_and_frequency(cursor, match_situation_tracker):
+    """
+    Calculate and store averages and frequency for each match situation.
 
-            # Query the final run score and add to counter
-            c.execute(f"SELECT run_total FROM {table_name} WHERE ball = 1")
-            n = c.fetchone()[0]
-            sum_run_total += n
+    Args:
+        cursor: The SQLite cursor object.
+        match_situation_tracker: The dictionary containing match situations.
 
-        # Calculate average and store in list
-        average_run_total = sum_run_total / length
-        averages_list.append(average_run_total)
+    Returns:
+        A dictionary containing match situations with averages and frequency.
+    """
+    averages_and_frequency = {}
 
-    # Append frequency to list
-    averages_list.append(frequency)
+    # Loop over each match situation
+    for situation in match_situation_tracker.keys():
+        averages_list = []
+        frequency = 0
 
-    # Store list in dictionary
-    match_situation_tracker_v5[situation] = averages_list
+        # Loop over each of the 2 lists
+        for i in range(2):
+            length = len(match_situation_tracker[situation][i])
+            frequency += length
+            sum_run_total = 0
 
-# Open the text file and read the contents into a dictionary
-output_path = os.path.join("/mnt/c/WINDOWS/system32/CS50-Final-Project/analysis", "txt_files", "match_situation_tracker_v5.txt")
-with open(output_path, "w") as f:
-    json.dump(match_situation_tracker_v5, f)
+            # Loop over each match in the list
+            for match_id in match_situation_tracker[situation][i]:
+                table_name = "match_" + match_id
 
-# Close the cursor and the database connection
-c.close()
-conn.close()
+                # Query the final run score and add to counter
+                cursor.execute(f"SELECT run_total FROM {table_name} WHERE ball = 1")
+                n = cursor.fetchone()[0]
+                sum_run_total += n
+
+            # Calculate average and store in list
+            average_run_total = sum_run_total / length
+            averages_list.append(average_run_total)
+
+        # Append frequency to list
+        averages_list.append(frequency)
+
+        # Store list in dictionary
+        averages_and_frequency[situation] = averages_list
+
+    return averages_and_frequency
+
+
+def save_match_situation_tracker(match_situation_tracker, output_path):
+    """
+    Save the match situation tracker as a JSON file.
+
+    Args:
+        match_situation_tracker: The dictionary containing match situations.
+        output_path: The path to save the JSON file.
+    """
+    with open(output_path, "w") as f:
+        json.dump(match_situation_tracker, f)
+
+
+if __name__ == "__main__":
+    main()
