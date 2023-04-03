@@ -129,7 +129,6 @@
 	justify-content: center;
   }
 
-  Copy code
 /* Pretty box container */
 .pretty-box {
   background-color: #e3f2d9; /* Adjust the background color as needed */
@@ -144,17 +143,115 @@
   margin: 20px auto; /* Adjust the margin as needed */
 }
 
-/* Line 1 */
-.pretty-box .line1 {
+/* Lines */
+.pretty-box .line {
   font-size: 1.2rem;
   font-weight: bold;
   color: #1a1a1a; /* Adjust the text color as needed */
   margin-bottom: 10px; /* Adjust the space between the lines as needed */
 }
 
-/* Line 2 */
-.pretty-box .line2 {
-  font-size: 1rem;
-  font-weight: normal;
-  color: #333; /* Adjust the text color as needed */
+/* Search container */
+.search-container {
+	margin-top: 50px; /* Adjust the value according to your preference */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 20px;
+  }
+  
+  /* Search input */
+  #bowler-search {
+	font-size: 1rem;
+	padding: 8px 12px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	width: 300px;
+  }
+  
+  /* Reset button */
+  #reset-button {
+    background-color: #f44336;
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
 }
+
+  #reset-button:hover {
+	background-color: #d32f2f;
+  }
+  
+  /* Bowler stats container */
+  .bowler-stats-container {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 10px;
+  }
+  
+  /* Individual bowler stats box */
+  .bowler-stats-box {
+	background-color: #e3f2d9;
+	border: 2px solid #1a1a1a;
+	border-radius: 10px;
+	padding: 20px;
+	width: 150px;
+	text-align: center;
+  }
+  
+  .bowler-stats-box h3 {
+	font-size: 1.1rem;
+	font-weight: bold;
+	margin-bottom: 10px;
+  }
+  
+  .bowler-stats-box p {
+	font-size: 0.9rem;
+	margin-bottom: 5px;
+  }
+
+  .search-input {
+    padding: 12px 20px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    width: 30%; /* Adjust the width according to your preference */
+}
+
+#search-button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 12px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.flashes {
+	list-style: none;
+	padding: 0;
+	margin-bottom: 20px;
+  }
+  
+  .flashes li {
+	padding: 10px;
+	border-radius: 5px;
+	margin-bottom: 5px;
+  }
+  
+  .flashes li.warning {
+	background-color: #fce788;
+	color: #856404;
+  }

@@ -6,11 +6,59 @@
 
 {% block main %}
 
-<form action="/bowler_comparisons" method="post">
-    <div class="mb-3">
-        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="bowler" name="bowler" type="text">
-    </div>
-    <button class="btn btn-primary" type="submit">Compare</button>
-</form>
+{% if error_messages %}
+  <ul class="flashes">
+  {% for message in error_messages %}
+    <li class="warning">{{ message }}</li>
+  {% endfor %}
+  </ul>
+{% endif %}
 
+<form id = "search-form" class="search-container" action="{{ url_for('search_bowler') }}" method="POST">
+    {{ form.csrf_token }}
+    {{ form.bowler_search(class_="search-input") }}
+    <button id="search-button" type="submit">Search</button>
+    <a id="reset-button" href="{{ url_for('reset_bowler_comparisons') }}">Reset</a>
+</form>
+  
+<div id = "bowler-stats-container" class="bowler-stats-container">
+  {% for bowler_stats in bowler_stats_list %}
+      <div class="bowler-stats-box">
+          <h3>{{ bowler_stats.name }}</h3>
+          <p>Economy: {{ bowler_stats.economy }}</p>
+          <p>Average: {{ bowler_stats.average }}</p>
+          <p>Prop score: {{ bowler_stats.prop_score }}</p>
+      </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  $(function() {
+    var availableBowlers = JSON.parse('{{ all_bowlers|tojson|safe }}'); // Added quotes and used JSON.parse
+    
+    $("input[name='bowler_search']").autocomplete({
+      source: availableBowlers
+    });
+
+    $("#search-form").submit(function(event) {
+      event.preventDefault();
+      
+      $.ajax({
+        url: "{{ url_for('search_bowler') }}",
+        method: "POST",
+        data: $(this).serialize(),
+        success: function(response) {
+          $("#bowler-stats-container").append(response);
+          $("input[name='bowler_search']").val("");
+        },
+        error: function() {
+          alert("An error occurred. Please try again.");
+        }
+      });
+    });
+  });
+</script>
 {% endblock %}

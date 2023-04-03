@@ -110,7 +110,7 @@ def calculate_bowler_metrics(cursor):
         except ZeroDivisionError:
             average = 10000
 
-        prop_score = economy
+        prop_score = round((runs - 8.7 * wickets) / overs, 2)
 
         cursor.execute(
             "UPDATE bowlers SET economy = ? WHERE name = ?", (economy, bowler)

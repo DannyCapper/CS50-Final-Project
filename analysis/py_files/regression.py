@@ -112,12 +112,15 @@ def plot_regression(run_score, wicket_total, results):
     plt.plot(x_values, y_values, color='red', lw=2)
 
     # Set labels and title
-    plt.xlabel('Wicket Total')
+    plt.xlabel('Wickets Lost')
     plt.ylabel('Run Score')
-    plt.title('Linear Regression Model: Run Score vs Wicket Total')
+    plt.title('Linear Regression Model')
+
+    # Set directory path for file to be saved
+    output_path = Path("/mnt/c/USERS/danny/CS50-Final-Project/website/static/regression.png")
 
     # Save the figure to a file
-    plt.savefig('output.png')
+    plt.savefig(output_path)
 
 if __name__ == "__main__":
     main()
